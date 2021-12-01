@@ -1,6 +1,6 @@
 # input = [199, 200, 208,210, 200, 207, 240, 269, 260, 263]
 
-with open("day1\ex1\input.txt", mode="r") as file:
+with open("Fabian\Day1\input.txt", mode="r") as file:
     input = [int(x) for x in file.readlines()]
 
 def count_increases(array):
