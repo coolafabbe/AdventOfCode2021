@@ -86,38 +86,3 @@ assert life_support_ratig(test_lines) == 230, "Function is wrong"
 
 print("Part B:", life_support_ratig(lines))
 
-
-"""
-
-horizontal = 0
-depth = 0
-for i in Data:
-    move, count = i.split(" ")
-    count = int(count)
-    if move == "forward":
-        horizontal += count
-    elif move == "down":
-        depth += count
-    else:
-        depth -= count
-position = horizontal * depth
-print("Part A:", position)
-"""
-
-"""
-horizontal = 0
-depth = 0
-aim = 0
-for i in Data:
-    move, count = i.split(" ")
-    count = int(count)
-    if move == "forward":
-        horizontal += count
-        depth += aim * count
-    elif move == "down":
-        aim += count
-    else:
-        aim -= count
-position = horizontal * depth
-print("Part B:", position)
-"""
