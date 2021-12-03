@@ -1,8 +1,7 @@
-with open("input.txt", mode="r") as file:
+with open("input example.txt", mode="r") as file:
     input = file.readlines()
 
 input = [list(x.strip()) for x in input]
-print(input[0])
 
 def count(data, least):
     list = []
@@ -30,3 +29,20 @@ epsilon_rate = int("".join(str(x) for x in epsilon_list), 2)
 print(epsilon_rate)
 
 print(gamma_rate * epsilon_rate)
+
+############### Ex2
+
+
+print(gamma_list)
+oxygen_list = []
+for count, value in enumerate(gamma_list):
+
+    for index in input:
+        print(index[count])
+        print(value)
+        print("\n")
+        if index[count] != value:
+            input.pop(index)
+
+print(oxygen_list)
+
