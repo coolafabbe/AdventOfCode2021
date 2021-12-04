@@ -2,7 +2,7 @@ import os
 import numpy as np
 path = os.path.dirname(os.path.realpath(__file__))
 
-def bingo(numbers:list, boards:list):
+def bingo(numbers:list, boards:list, play2loose:bool=False):
 
     def play(boards, number):
         for b in range(len(boards)):
@@ -12,6 +12,7 @@ def bingo(numbers:list, boards:list):
                         boards[b][r][c] = -1
     
     def check(boards):
+        results = []
         for b in range(len(boards)):
             tot = 0
             rows = [0 for i in range(5)]
@@ -26,16 +27,28 @@ def bingo(numbers:list, boards:list):
                         tot += v
 
             if (-5 in rows) or (-5 in cols):
-                return (b, tot)
+                results.append([b, tot])
+            else:
+                results.append([b, None])
         
-        return (None, None)
+        return results
 
+    leaderboard = []
     for number in numbers:
         play(boards, number)
-        (board, total) = check(boards)
-        if board != None:
-            return (board,total*number)
-    
+        results = check(boards)
+        for (board, total) in results:
+            if total != None:
+                if not play2loose:
+                    return (board,total*number)
+                else:
+                    if len(leaderboard)<len(boards)-1:
+                        if (board not in leaderboard):
+                            leaderboard.append(board)
+                    else:
+                        if (board not in leaderboard):
+                            return (board,total*number)
+
     return (None, None)
     
     
@@ -79,10 +92,8 @@ with open(path+"/input.txt") as file:
         boards.append(board)
 
 assert bingo(test_numbers, test_boards) == (2, 4512), "Function is wrong"
-
 print("Part A:", bingo(numbers, boards))
 
-#assert life_support_ratig(test_lines) == 230, "Function is wrong"
-
-#print("Part B:", life_support_ratig(lines))
+assert bingo(test_numbers, test_boards, play2loose=True) == (1, 1924), "Function is wrong"
+print("Part B:", bingo(numbers, boards, play2loose=True))
 
