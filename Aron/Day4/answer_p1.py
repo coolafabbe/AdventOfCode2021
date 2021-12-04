@@ -85,19 +85,18 @@ if __name__ == "__main__":
             elif not id in best_boards and board_progress == best_progress:
                 best_boards.append(id)
             if not id in completed_boards and board_progress == 5:
+                board_sum = board.sum_unmarked()
                 if len(completed_boards) == 0:
                     print(f'{UP}BINGO! On board {id+1}{CLR}')
                     board.print_marked()
-                    board_sum = board.sum_unmarked()
                     print(f'Answer 1: sum_unmarked [{board_sum}] * drawn_number [{drawn_number}] = {GREEN}{board_sum * int(drawn_number)}{END_COLOR}')
 
                 completed_boards.append(id)
-
                 if len(completed_boards) == len(boards):
-                    print(f'Answer 2: The last board to reach BINGO! was nr {id+1} with a score of {GREEN}{board_sum * int(drawn_number)}{END_COLOR}')
+                    print(f'Answer 2: Last to reach BINGO! was nr {id+1} with a score of {GREEN}{board_sum * int(drawn_number)}{END_COLOR}')
                     exit()
         if not completed_boards:
             print(f'{UP}Drawn numbers: {GREEN}{" ".join(drawn[:drawn_id+1])}{END_COLOR}{CLR}')
             print(f'Best progress: Board {best_boards[0]} ({best_progress} in a line), along with {len(best_boards)} other boards.{CLR}')
             boards[best_boards[0]].print_marked()
-            time.sleep(1)
+            time.sleep(0.1)
