@@ -23,6 +23,7 @@ def consumption(lines:list):
 def life_support_ratig(lines:list):
 
     def count(l,i,c):
+        # Counts occurrence of value 'c' in index 'i' of elements in the list 'l' (expected to be strings of same length) 
         res = 0
         for k in range(len(l)): 
             if l[k][i] == c:
@@ -30,6 +31,7 @@ def life_support_ratig(lines:list):
         return res
 
     def clean(l,i,c):
+        # Cleans elements in the list 'l' (expected to be strings of same length)  where value in index 'i' is equal to 'c'
         k = 0
         while k < len(l): 
             if l[k][i] != c:
