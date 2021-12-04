@@ -1,4 +1,4 @@
-with open("input example.txt", mode="r") as file:
+with open("input.txt", mode="r") as file:
   input = file.read().strip().split("\n")
 #print(input)
 
@@ -9,12 +9,12 @@ def find_gamma_epsilon(data, ones=True):
       count_one += 1
     else:
       count_zero += 1
-   
-  if (count_one >= count_zero and ones) or (count_one > count_zero and not ones): 
+  
+
+  if (count_one >= count_zero and ones) or (count_zero <= count_one and not ones): 
     return ("1", "0")
   else:
     return ("0", "1")
-
 
 #Part 1
 gamma = epsilon = ""
@@ -26,7 +26,7 @@ for i in range(len(input[0])):
   epsilon += values[1]
 
 #print(int(gamma,2))
-#hdfprint(int(epsilon,2))
+#print(int(epsilon,2))
 power_consumption = int(gamma,2) * int(epsilon,2)
 print(f"Part 1: {power_consumption}")
 
@@ -34,38 +34,34 @@ print(f"Part 1: {power_consumption}")
 
 # Part 2
 # print(input)
+oxygen_co2 = []
+for i in range(2):
+  data = input.copy()
+  for bit_index in range(len(data[0])):
+    column = [x[bit_index] for x in data]
+    if i == 0:
+      value_to_keep = find_gamma_epsilon(column)[0]
+    else:
+      value_to_keep = find_gamma_epsilon(column, ones = False)[1]
 
-data = input
-for bit_index in range(len(data[0])):
-  #print(f"bit index {bit_index}")
-  column = [x[bit_index] for x in data]
-  value_to_keep_oxygen = find_gamma_epsilon(column)[0]
-  value_to_keep_co2 = find_gamma_epsilon(column, False)[1]
-  #print(f"column {column}")
-  #print(f"value_to_keep {value_to_keep}, type {type(value_to_keep)}")
+    values_to_remove = []
+    for value in data:
 
-  values_to_remove = []
-  for value in data:
-    #print(f"value = {value}, type {type(value)}")
+      if value[bit_index] != value_to_keep:
+        values_to_remove.append(value)
     
-    #print(f"value[bit_index] {value[bit_index]}, type {type(value[bit_index])}")
+    for value in values_to_remove:
+      data.remove(value)
 
-    if value[bit_index] != value_to_keep_oxygen:
-      #print(f"remove {value}!")
-      values_to_remove.append(value)
-  
-  for value in values_to_remove:
-    data.remove(value)
+    if len(data) == 1:
+      break
 
-  print(data)
-  if len(data) == 1:
-    break
+  oxygen_co2.append(data[0])
 
-oxygen = data[0]
-print("Part 2 oxygen: " + oxygen + ", " + str(int(oxygen,2)))
-
-
-
+#print("Part 2 oxygen: " + oxygen_co2[0] + ", " + str(int(oxygen_co2[0],2)))
+#print("Part 2 co2: " + oxygen_co2[1] + ", " + str(int(oxygen_co2[1],2)))
+oxygen_generator_rating = int(oxygen_co2[0], 2) * int(oxygen_co2[1], 2)
+print(f"Part 2: {oxygen_generator_rating}")
 
 
 
