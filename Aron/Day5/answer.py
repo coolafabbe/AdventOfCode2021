@@ -4,24 +4,25 @@ GREEN = '\033[92m'
 GRAY = '\033[90m'
 END_COLOR = '\033[0m'
 CLR = '\x1B[0K'
+g=100
 
-def print_graph(graph, graph_dim):
+def print_graph(graph, graph_dim, visualize):
     danger_points = 0
     for y in range(len(graph)):
         for x in range(len(graph[0])):
             if graph[x][y] == 0:
-                if graph_dim[0] < 50:
+                if visualize:
                     print(f'{GRAY}{graph[x][y]}{END_COLOR}', end=' ')
                 pass
             elif graph[x][y] == 1:
-                if graph_dim[0] < 50:
+                if visualize:
                    print(f'{graph[x][y]}', end=' ')
                 pass
             else:
                 danger_points += 1
-                if graph_dim[0] < 50:
+                if visualize:
                     print(f'{GREEN}{graph[x][y]}{END_COLOR}', end=' ')
-        if graph_dim[0] < 50:
+        if visualize:
             print(CLR)
     return danger_points
 
@@ -46,23 +47,23 @@ if __name__ == "__main__":
                 graph_dim[1] = y+1
 
     print(f'Graph max coords: {graph_dim}\n')
-    if graph_dim[0] > 50:
-        print(f'Graph larger than 50 columns, not visualizing output.')
+    if graph_dim[0] > g:
+        print(f'Graph larger than {g} columns, not visualizing output.')
 
     graph = [[0 for x in range(graph_dim[0])] for y in range(graph_dim[1])]
 
-    if graph_dim[0] < 50:
-        print_graph(graph, graph_dim)
+    if graph_dim[0] < g:
+        print_graph(graph, graph_dim, True)
         print(f'Danger points: {GREEN}0{END_COLOR}')
 
     for id, line in enumerate(lines):
-        if graph_dim[0] < 50:
+        if graph_dim[0] < g:
             time.sleep(1)
         x1, y1 = line[0]
         x2, y2 = line[1]
         x_min, x_max = min(x1, x2), max(x1, x2)
         y_min, y_max = min(y1, y2), max(y1, y2)
-        if graph_dim[0] < 50:
+        if graph_dim[0] < g:
             print(f'\x1B[{graph_dim[1]+3}A')
         if x_min == x_max:
             print(f'Adding vertical line: ({x1}, {y1}) -> ({x2}, {y2}){CLR}')
@@ -81,8 +82,10 @@ if __name__ == "__main__":
                     graph[x][y] += 1
             else:
                 print(f'Omitting diagonal line: ({x1}, {y1}) -> ({x2}, {y2}){CLR}')
-        danger_points = print_graph(graph, graph_dim)
+        danger_points = print_graph(graph, graph_dim, graph_dim[0] < g)
         print(f'Danger points: {GREEN}{danger_points}{END_COLOR}{CLR}')
-        if graph_dim[0] > 50 and id+1 < len(lines):
+        if graph_dim[0] > g and id+1 < len(lines):
             print('\x1B[3A')
+    if 'visualize-final' in sys.argv:
+        print_graph(graph, graph_dim, True)
 
