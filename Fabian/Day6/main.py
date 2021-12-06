@@ -5,19 +5,28 @@ import re
 
 path = os.path.dirname(os.path.realpath(__file__))
 
-def lantern_fish(max_days, data):
-  for day in range(max_days):
-    #print(f"Day {day}: {data}")
-    new_fishes = []
-    for i in range(len(data)):
-      data[i] -= 1
-      if data[i] < 0:
-        data[i] = 6
-        new_fishes.append(8)
-    
-    data.extend(new_fishes)
+def lantern_fish(max_days, input):
+  data = [0] * 9
+  for fish in input:
+    data[fish] += 1
 
-  return(len(data))
+
+  for day in range(max_days +1):
+    if day > 0:
+      data = next_day
+    next_day = [0] * 9
+
+    for i in range(len(data)):
+      if i > 0:
+        next_day[i-1] += data[i]
+      else:
+        next_day[8] += data[i]
+        next_day[6] += data[i]
+
+  sum = 0
+  for d in data:
+    sum += d
+  return(sum)
         
 
 with open(path+"/input.txt") as file:
@@ -27,11 +36,5 @@ test_input = [3,4,3,1,2]
 
 assert lantern_fish(80, test_input) == 5934, "Function is wrong"
 print("Part A:", lantern_fish(80, input))
-assert lantern_fish(265, test_input) == 26984457539, "Function is wrong"
-print("Part A:", lantern_fish(265, input))
-# assert hydrothermal_venture(test_size, test_lines, True) == 12, "Function is wrong"
-# print("Part B:", hydrothermal_venture(size, lines, True))
-
-
-# plt.imshow(map >= 1)
-# plt.show()
+assert lantern_fish(256, test_input) == 26984457539, "Function is wrong"
+print("Part B:", lantern_fish(256, input))
