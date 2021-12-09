@@ -1,0 +1,10 @@
+make list of segments for every number
+create empty remapped_nums list
+//make dictionary with expected occurences of every segment
+for every line, loop through the signals:
+    if length == [2, 4, 3, 7] (for 1, 4, 7, 8):
+        add signal to remapped_nums list
+    add diff between remapped_nums 1 and 7 to [0, 2, 3, 5, 6, 9]
+    add diff between remapped_nums 1 and 4 to [5, 6, 9]
+    add remapped_nums[1] to remapped_nums[9]
+
