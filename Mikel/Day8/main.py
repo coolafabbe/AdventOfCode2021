@@ -20,30 +20,22 @@ def decode_2(data:list):
                 sef_cf = set(d)
             elif len(d)==3:
                 seg_acf = set(d)
-            elif len(d)==4:
-                seg_bcdf = set(d)
             elif len(d)==5:
                 seg_adg = seg_adg.intersection(set(d))
             elif len(d)==6:
                 seg_abfg = seg_abfg.intersection(set(d))
-        return (sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg)
+        return (sef_cf, seg_acf, seg_adg, seg_abfg)
 
-    def get_segments_chars(sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg):
-        # Find a: difference between 7 and 1
-        seg_a = seg_acf.difference(sef_cf)
-        # Find g: 4+7 are 9-g, the only 6 dig combination with one seg difference  
-        seg_g = seg_abfg.difference(seg_adg).difference(sef_cf)      
-        # Find c: All 6 seg combinations have f in common
-        seg_c = sef_cf.intersection(seg_abfg)
-        # Find f: we use dig_1 - seg_c
+    def get_segments_chars(sef_cf, seg_acf, seg_adg, seg_abfg):
+        seg_a = seg_acf.difference(sef_cf)  
+        seg_ag = seg_abfg.intersection(seg_adg)
+        seg_g = seg_ag.difference(seg_a)
+        seg_d = seg_adg.difference(seg_ag)
+        seg_c = sef_cf.difference(seg_abfg)
         seg_f = sef_cf.difference(seg_c)
-        # Find e:           
-        seg_e = set("abcdefg").difference(seg_abfg).difference(seg_bcdf)
-        # Find d: We get d from adg 
-        seg_d = seg_adg.difference(seg_a).difference(seg_g)
-        # Find d: the one left
-        seg_b = seg_bcdf.difference(sef_cf).difference(seg_d)
-
+        seg_bf = seg_abfg.difference(seg_adg)
+        seg_b = seg_bf.difference(seg_f)           
+        seg_e = set("abcdefg").difference(seg_adg,seg_acf,seg_b)
         return (seg_a.pop(), seg_b.pop(), seg_c.pop(), seg_d.pop(), seg_e.pop(), seg_f.pop(), seg_g.pop())
 
     def get_digits_dict(seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g):
@@ -62,9 +54,9 @@ def decode_2(data:list):
 
     count = 0
     for (patterns, digits) in data:
-        (sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg) = get_masters(patterns)
-        (seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g) = get_segments_chars(sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg) 
-        digits_dict = get_digits_dict(seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g)
+        masters = get_masters(patterns)
+        segments = get_segments_chars(*masters)
+        digits_dict = get_digits_dict(*segments)
         number = 0
         for digit in digits:
             number *= 10
