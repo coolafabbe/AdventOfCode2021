@@ -13,55 +13,36 @@ def decode_1(data:list):
 def decode_2(data:list):
 
     def get_masters(patterns:list):
-        dig_1 = ''
-        dig_4 = ''
-        dig_7 = ''
-        dig_8 = ''
-        opt_5 = []
-        opt_6 = []
+        seg_adg = set("abcdefg")
+        seg_abfg = set("abcdefg")
         for d in patterns:
             if len(d)==2:
-                dig_1 = d
+                sef_cf = set(d)
             elif len(d)==3:
-                dig_7 = d
+                seg_acf = set(d)
             elif len(d)==4:
-                dig_4 = d
+                seg_bcdf = set(d)
             elif len(d)==5:
-                if d not in opt_5: opt_5.append(d)
+                seg_adg = seg_adg.intersection(set(d))
             elif len(d)==6:
-                if d not in opt_6: opt_6.append(d)
-            elif len(d)==7:
-                dig_8 = d
-        return (dig_1, dig_4, dig_7, dig_8, opt_5, opt_6)
+                seg_abfg = seg_abfg.intersection(set(d))
+        return (sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg)
 
-    def get_segments_chars(dig_1, dig_4, dig_7, dig_8, opt_5, opt_6):
+    def get_segments_chars(sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg):
         # Find a: difference between 7 and 1
-        seg_a = set(dig_7).difference(set(dig_1))
-        assert len(seg_a)==1, print(dig_7,dig_1)
+        seg_a = seg_acf.difference(sef_cf)
         # Find g: 4+7 are 9-g, the only 6 dig combination with one seg difference  
+        seg_g = seg_abfg.difference(seg_adg).difference(sef_cf)      
         # Find c: All 6 seg combinations have f in common
-        comb_6 = set("abcdefg")
-        almost_dig_9 = set(dig_7).union(set(dig_4))
-        for opt in opt_6:
-            comb_6 = comb_6.intersection(set(opt))
-            diff = set(opt).difference(almost_dig_9)
-            if len(diff)==1:
-                seg_g = set(diff)
-        for c in set(dig_1):
-            if c not in comb_6:
-                seg_c = set(c)
-                break        
+        seg_c = sef_cf.intersection(seg_abfg)
         # Find f: we use dig_1 - seg_c
-        seg_f = set(dig_1).difference(seg_c)
+        seg_f = sef_cf.difference(seg_c)
         # Find e:           
-        seg_e = set(dig_8).difference(almost_dig_9.union(seg_g))
-        # Find b: We get abg from the opt_5
-        seg_adg = set("abcdefg")
-        for opt in opt_5:
-            seg_adg = seg_adg.intersection(set(opt))
+        seg_e = set("abcdefg").difference(seg_abfg).difference(seg_bcdf)
+        # Find d: We get d from adg 
         seg_d = seg_adg.difference(seg_a).difference(seg_g)
         # Find d: the one left
-        seg_b = set(dig_4).difference(set(dig_1)).difference(seg_d)
+        seg_b = seg_bcdf.difference(sef_cf).difference(seg_d)
 
         return (seg_a.pop(), seg_b.pop(), seg_c.pop(), seg_d.pop(), seg_e.pop(), seg_f.pop(), seg_g.pop())
 
@@ -81,8 +62,8 @@ def decode_2(data:list):
 
     count = 0
     for (patterns, digits) in data:
-        (dig_1, dig_4, dig_7, dig_8, opt_5, opt_6) = get_masters(patterns)
-        (seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g) = get_segments_chars(dig_1, dig_4, dig_7, dig_8, opt_5, opt_6) 
+        (sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg) = get_masters(patterns)
+        (seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g) = get_segments_chars(sef_cf, seg_bcdf, seg_acf, seg_adg, seg_abfg) 
         digits_dict = get_digits_dict(seg_a, seg_b, seg_c, seg_d, seg_e, seg_f, seg_g)
         number = 0
         for digit in digits:
